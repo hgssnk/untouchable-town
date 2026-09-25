@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>触れない街</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<main>
+  <h1>触れない街</h1>
+  <p class="lead">住民は動かせない。置けるのは、1日1手だけ。</p>
+  <details>
+    <summary>遊び方</summary>
+    <ul>
+      <li>住民は自分の意思で歩き、操作はできません</li>
+      <li>検閲官(あなた)は、1日1回、道・ベンチ・灯りを配置・撤去することだけ可能です</li>
+      <li>ベンチに座っている or 夜に灯りの下にいると出会いが発生します</li>
+      <li>雨の日は外出が減ります</li>
+      <li>1日4組以上、かつ、7日連続で何も触らず、うち4日以上達成でクリア</li>
+    </ul>
+  </details>
+
+  <div class="board"><canvas id="cv" aria-label="街の盤面"></canvas></div>
+
+  <div class="status">
+    <div class="day" id="day">1日目</div>
+    <div class="flow">触らなかった日<span class="dots" id="dots"></span></div>
+  </div>
+  <p class="msg" id="msg">道・ベンチ・灯りを置いて、住民どうしが自然に出会う街にしてください。</p>
+
+  <div class="tools">
+    <button class="tool" data-tool="1" aria-pressed="true">道</button>
+    <button class="tool" data-tool="2" aria-pressed="false">ベンチ</button>
+    <button class="tool" data-tool="3" aria-pressed="false">灯り</button>
+    <button class="tool" data-tool="0" aria-pressed="false">撤去</button>
+  </div>
+  <div class="row">
+    <button class="btn primary" id="next">1日すすめる</button>
+    <button class="btn sub" id="heatBtn" aria-pressed="false">足あと</button>
+  </div>
+
+  <h2>ログ</h2>
+  <ol class="log" id="log"></ol>
+  <p class="foot"><button class="linkbtn" id="reset">最初からやり直す</button></p>
+</main>
+
+<style>
+:root{
+  --bg:#e7eadf; --panel:#f3f4ee; --ink:#243029; --muted:#5d695f; --line:#c5ccbc;
+  --accent:#2f6150; --accent-ink:#f3f4ee; --lamp:#d99a1e; --ok:#2f6150; --ng:#9a4a36;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#1b221f; --panel:#232c28; --ink:#e3e7dd; --muted:#9aa69c; --line:#38443e;
+  --accent:#8cc4ae; --accent-ink:#15201b; --lamp:#f0b847; --ok:#8cc4ae; --ng:#e08b72; } }
+:root[data-theme="dark"]{
+  --bg:#1b221f; --panel:#232c28; --ink:#e3e7dd; --muted:#9aa69c; --line:#38443e;
+  --accent:#8cc4ae; --accent-ink:#15201b; --lamp:#f0b847; --ok:#8cc4ae; --ng:#e08b72; }
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.75rem;letter-spacing:.08em;margin:0;font-weight:700}
+.lead{margin:2px 0 16px;color:var(--muted);font-size:.95rem}
+.board{position:relative;width:100%;aspect-ratio:1;border-radius:6px;overflow:hidden;touch-action:manipulation;box-shadow:0 0 0 1px var(--line)}
+canvas{display:block;width:100%;height:100%}
+.status{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:14px 0 4px;font-size:.95rem}
+.day{font-size:1.25rem;font-weight:700}
+.flow{color:var(--muted);text-align:right}
+.dots{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}
+.dots i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--muted);display:inline-block}
+.dots i.ok{background:var(--ok);border-color:var(--ok)}
+.dots i.ng{background:transparent;border-color:var(--ng)}
+.msg{min-height:3.2em;margin:6px 0 12px;font-size:.95rem}
+.msg b{font-weight:700}
+.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.tool{font:inherit;font-size:.9rem;padding:10px 4px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;cursor:pointer}
+.tool[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+.tool:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.btn{font:inherit;font-size:.95rem;padding:10px 14px;border-radius:8px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.btn.primary{flex:1 1 100%;background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700;font-size:1.05rem;padding:13px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.sub{flex:1}
+button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+h2{font-size:1rem;margin:28px 0 6px}
+ol.log{list-style:none;padding:0;margin:0;font-size:.88rem;color:var(--muted);max-height:220px;overflow:auto}
+ol.log li{padding:5px 0;border-bottom:1px solid var(--line)}
+ol.log li strong{color:var(--ink);font-weight:700}
+details{margin-top:24px;font-size:.92rem}
+summary{cursor:pointer;font-weight:700}
+details p{margin:.5em 0;color:var(--muted)}
+.foot{margin-top:24px;font-size:.8rem;color:var(--muted)}
+.linkbtn{font:inherit;font-size:.8rem;background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0}
+</style>
+
+<script src="./model/sim.js"></script>
+<script src="./buttons/boardPlacement/tiles.js"></script>
+<script src="./buttons/heatToggle/heatmap.js"></script>
+<script src="./buttons/heatToggle/meetings.js"></script>
+<script src="./buttons/advanceDay/residents.js"></script>
+<script src="./buttons/advanceDay/night.js"></script>
+<script src="./buttons/advanceDay/background.js"></script>
+<script src="./view.js"></script>
+<script src="./model/state.js"></script>
+<script src="./controller.js"></script>
+<script src="./buttons/toolSelect/index.js"></script>
+<script src="./buttons/boardPlacement/index.js"></script>
+<script src="./buttons/heatToggle/index.js"></script>
+<script src="./buttons/reset/index.js"></script>
+<script src="./buttons/advanceDay/finishDay.js"></script>
+<script src="./buttons/advanceDay/index.js"></script>
+<script src="./index.js"></script>
+</body>
+</html>
