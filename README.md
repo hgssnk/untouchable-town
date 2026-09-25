@@ -2,7 +2,7 @@
 
 結果は触れない。構造だけ触れる。
 
-[遊ぶ](https://hgssnk.github.io/untouchable-town/page-town/)
+[遊ぶ](https://hgssnk.github.io/untouchable-town/)
 
 ## 総括
 
