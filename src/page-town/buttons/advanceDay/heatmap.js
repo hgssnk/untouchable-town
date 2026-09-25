@@ -1,7 +1,7 @@
-// ===== 足あとヒートマップ（showHeat時のみ） =====
+// ===== 足あとヒートマップ（直近の1日が終わったら常に表示） =====
 window.RenderLayers = window.RenderLayers || {};
-window.RenderLayers.heatmap = function(rctx, { showHeat, anim, lastRes }){
-  if (!(showHeat && !anim && lastRes)) return;
+window.RenderLayers.heatmap = function(rctx, { anim, lastRes }){
+  if (anim || !lastRes) return;
   const { N } = window.Sim;
   const { ctx, cellPx: c } = rctx;
 

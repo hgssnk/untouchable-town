@@ -39,7 +39,6 @@
   </div>
   <div class="row">
     <button class="btn primary" id="next">1日すすめる</button>
-    <button class="btn sub" id="heatBtn" aria-pressed="false">足あと</button>
   </div>
 
   <h2>ログ</h2>
@@ -84,7 +83,6 @@ canvas{display:block;width:100%;height:100%}
 .btn{font:inherit;font-size:.95rem;padding:10px 14px;border-radius:8px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .btn.primary{flex:1 1 100%;background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700;font-size:1.05rem;padding:13px}
 .btn:disabled{opacity:.4;cursor:default}
-.btn.sub{flex:1}
 button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
 h2{font-size:1rem;margin:28px 0 6px}
 ol.log{list-style:none;padding:0;margin:0;font-size:.88rem;color:var(--muted);max-height:220px;overflow:auto}
@@ -99,8 +97,7 @@ details p{margin:.5em 0;color:var(--muted)}
 
 <script src="./model/sim.js"></script>
 <script src="./buttons/boardPlacement/tiles.js"></script>
-<script src="./buttons/heatToggle/heatmap.js"></script>
-<script src="./buttons/heatToggle/meetings.js"></script>
+<script src="./buttons/advanceDay/heatmap.js"></script>
 <script src="./buttons/advanceDay/residents.js"></script>
 <script src="./buttons/advanceDay/night.js"></script>
 <script src="./buttons/advanceDay/background.js"></script>
@@ -109,7 +106,6 @@ details p{margin:.5em 0;color:var(--muted)}
 <script src="./controller.js"></script>
 <script src="./buttons/toolSelect/index.js"></script>
 <script src="./buttons/boardPlacement/index.js"></script>
-<script src="./buttons/heatToggle/index.js"></script>
 <script src="./buttons/reset/index.js"></script>
 <script src="./buttons/advanceDay/finishDay.js"></script>
 <script src="./buttons/advanceDay/index.js"></script>

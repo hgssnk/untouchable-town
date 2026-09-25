@@ -21,7 +21,6 @@ window.Buttons.boardPlacement = function(ctx){
     if (cur === ctx.tool){ ctx.say(ctx.tool === 0 ? 'そこには何もありません。' : `そこにはもう${ctx.TOOLNAME[ctx.tool]}があります。`); return; }
     ctx.state.action = {x, y, prev: cur, next: ctx.tool};
     ctx.state.layout[i] = ctx.tool;
-    ctx.showHeat = false;
     ctx.say(ctx.tool === 0 ? `(${x+1}, ${y+1}) を更地にしました。` : `(${x+1}, ${y+1}) に${ctx.TOOLNAME[ctx.tool]}を置きました。`);
     ctx.renderUI(); ctx.save();
   });

@@ -7,7 +7,6 @@ window.Buttons.advanceDay = function(ctx){
   ctx.$('next').addEventListener('click', () => {
     if (ctx.anim) return;
     const res = simulateDay(ctx.state.layout, daySeed(ctx.state.seed, ctx.state.day));
-    ctx.showHeat = false;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     ctx.anim = { res, t: 0, start: performance.now(), skip: reduce };
     ctx.say(res.rain ? '雨の一日です。外に出る人が少なくなります。' : '晴れの一日が始まりました。盤面をタップすると飛ばせます。');

@@ -10,7 +10,7 @@ window.createCtx = function(cv, renderer){
   const ctx = {
     cv, $, renderer, TOOLNAME,
     get state(){ return S; }, set state(v){ S = v; },
-    tool: 1, anim: null, showHeat: false, lastRes: S.lastRes || null,
+    tool: 1, anim: null, lastRes: S.lastRes || null,
   };
 
   ctx.save = function(){
@@ -19,7 +19,7 @@ window.createCtx = function(cv, renderer){
   };
 
   ctx.draw = function(){
-    renderer.draw({ layout: S.layout, action: S.action, anim: ctx.anim, showHeat: ctx.showHeat, lastRes: ctx.lastRes });
+    renderer.draw({ layout: S.layout, action: S.action, anim: ctx.anim, lastRes: ctx.lastRes });
   };
 
   ctx.resize = function(){
@@ -34,8 +34,7 @@ window.createCtx = function(cv, renderer){
     $('dots').setAttribute('aria-label', `触らなかった日 ${S.window.length}日、うち達成 ${S.window.filter(Boolean).length}日`);
     const busy = !!ctx.anim;
     document.querySelectorAll('.tool').forEach(b => { b.setAttribute('aria-pressed', String(+b.dataset.tool === ctx.tool)); b.disabled = busy; });
-    $('next').disabled = busy; $('heatBtn').disabled = busy || !ctx.lastRes;
-    $('heatBtn').textContent = ctx.showHeat ? '出会いの糸' : '足あと';
+    $('next').disabled = busy;
     $('next').textContent = S.action ? '1日すすめる' : '何もせずに1日すすめる';
     const log = $('log'); log.innerHTML = '';
     S.log.slice().reverse().forEach(e => { const li = document.createElement('li'); li.innerHTML = e; log.appendChild(li); });

@@ -6,11 +6,10 @@ const ctx = createCtx(cv, renderer);
 
 window.Buttons.toolSelect(ctx);
 window.Buttons.boardPlacement(ctx);
-window.Buttons.heatToggle(ctx);
 window.Buttons.reset(ctx);
 window.Buttons.advanceDay(ctx);
 
 window.addEventListener('resize', ctx.resize);
-if (ctx.lastRes) ctx.say('前回の続きです。線は、前日に出会った住民どうしの家を結んでいます。');
+if (ctx.lastRes) ctx.say('前回の続きです。色が濃いところほど、住民が長くいた場所です。');
 ctx.resize(); ctx.renderUI();
 })();

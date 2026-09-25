@@ -4,7 +4,7 @@ window.RenderLayers.residents = function(rctx, { anim, tick, rain }){
   if (!anim) return;
   const { ctx, cellPx: c, center, COLORS, W } = rctx;
 
-  const fr = anim.res.frames, i0 = Math.min(fr.length-1, Math.floor(tick)), i1 = Math.min(fr.length-1, i0+1), f = tick - Math.floor(tick);
+  const fr = anim.res.frames, i0 = Math.max(0, Math.min(fr.length-1, Math.floor(tick))), i1 = Math.min(fr.length-1, i0+1), f = tick - Math.floor(tick);
   fr[i0].forEach((r0, id) => {
     const r1 = fr[i1][id]; if (!r0.vis && !r1.vis) return;
     const x = r0.x + (r1.x - r0.x)*f, y = r0.y + (r1.y - r0.y)*f;

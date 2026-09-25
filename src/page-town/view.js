@@ -23,17 +23,16 @@ function createRenderer(canvas){
 
   function draw(view){
     if (!rctx.W) return;
-    const { layout, action, anim, showHeat, lastRes } = view;
+    const { layout, action, anim, lastRes } = view;
     const tick = anim ? anim.t : -1;
     const nightA = anim ? Math.max(0, Math.min(0.62, (tick - (NIGHT-6)) / 10 * 0.62)) * (tick > T-3 ? Math.max(0,(T-tick)/3) : 1) : 0;
     const rain = anim ? anim.res.rain : false;
 
     window.RenderLayers.background(rctx, rain);
-    window.RenderLayers.heatmap(rctx, { showHeat, anim, lastRes });
+    window.RenderLayers.heatmap(rctx, { anim, lastRes });
     window.RenderLayers.tiles(rctx, { layout, action, nightA });
     window.RenderLayers.residents(rctx, { anim, tick, rain });
     window.RenderLayers.night(rctx, { layout, nightA });
-    window.RenderLayers.meetings(rctx, { anim, tick, lastRes, showHeat });
   }
 
   return { resize, draw };
