@@ -1,9 +1,8 @@
 # 触れない街 (Untouchable Town)
 
-*結果は触れない。構造だけ触れる。*
+結果は触れない。構造だけ触れる。
 
-**遊ぶ**: https://hgssnk.github.io/untouchable-town/page-town/
-**リポジトリ**: https://github.com/hgssnk/untouchable-town
+[遊ぶ](https://hgssnk.github.io/untouchable-town/page-town/)
 
 ## 総括
 
@@ -115,10 +114,6 @@ sequenceDiagram
 npm install
 npm run dev   # http://localhost:8000/src/ を自動で監視・リロード
 ```
-
-## デプロイ
-
-GitHub Actions（`.github/workflows/deploy-pages.yml`）でGitHub Pagesに手動デプロイする。`push`では自動デプロイしない——ActionsタブからDeploy to GitHub Pagesを`Run workflow`で手動実行。`src/`の中身をそのままPagesのルートとして公開する（ビルド不要なので、コピーするだけ）。
 
 ## 次の1手
 
