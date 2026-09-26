@@ -48,10 +48,9 @@ function createRenderer(canvas){
     if (game.mode === 'title'){
       L.city(rctx, { shopLit: false });
       centered('ディグ・シティ', 30, 16);
-      if (game.canWatch){
-        centered('はじめる', 104, 10); centered('眺める', 118, 10);
-        g.fillStyle = C[0]; g.font = rctx.font(10); g.textAlign = 'left'; g.fillText('▶', 48, 104 + game.titleSel * 14);
-      } else if (game.tick % 60 < 40) centered('PRESS  A', 118, 10);
+      centered('はじめる', 100, 10); centered('エンディングロール', 114, 10);
+      g.fillStyle = C[0]; g.font = rctx.font(10); g.textAlign = 'right';
+      g.fillText('▶', game.titleSel ? 80 - 45 - 4 : 80 - 20 - 4, 100 + game.titleSel * 14); g.textAlign = 'left';
     } else if (game.mode === 'still'){
       L.city(rctx, { shopLit: !!(talk && talk.cur && talk.cur.shop) });
     } else if (game.mode === 'walk'){

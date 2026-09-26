@@ -35,7 +35,7 @@ function start(G){
   G.say(S.intro, () => { G.flags.ready = true; });
 }
 
-// ---- 場面4：眺める（街を一周しながら、スタッフロールが流れる） ----
+// ---- 場面4：エンディングロール（街を一周しながら、スタッフロールが流れる） ----
 const WAYPOINTS = [[1,1],[4,1],[4,4],[8,4],[4,4],[4,7],[8,7],[4,7],[2,7]];
 
 function bfsRoute(map, from, waypoints){
@@ -82,7 +82,6 @@ function onTick(G){
 // ---- 場面5：手放す（ゲームボーイの外へ）。ここから先は、そのまま止まる ----
 function startOutro(G){
   G.outro = { t: 0 };
-  G.save('watch');                                           // 次に起動すると、タイトルに「眺める」が加わる
   G.cue('quiet');
 }
 

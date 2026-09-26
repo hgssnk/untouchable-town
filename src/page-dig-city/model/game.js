@@ -26,15 +26,14 @@ function create(chapters, rng, startIdx){
   const first = startIdx || 0;
   const G = {
     ch: chapters[first], idx: first, rng: rng || Math.random,
-    mode: 'title', tick: 0, flags: {}, memory: {}, note: null, mapId: null, onCue: null, onSave: null, menu: null, hud: null, lastChoice: 0,
-    auto: null, credits: null, outro: null, canWatch: false, titleSel: 0,
+    mode: 'title', tick: 0, flags: {}, memory: {}, note: null, mapId: null, onCue: null, menu: null, hud: null, lastChoice: 0,
+    auto: null, credits: null, outro: null, titleSel: 0,
     walker: createWalker(), talk: null, fade: null,
     dig: null, wipe: null, repair: null, arm: null, chop: null, band: null,
     chapters,
   };
   const hook = (name, ...args) => { if (G.ch[name]) G.ch[name](G, ...args); };
 
-  G.save = key => { if (key === 'watch') G.canWatch = true; if (G.onSave) G.onSave(key); };
   G.cue = name => { if (G.onCue) G.onCue(name); };
 
   // ---- 会話 ----
@@ -124,7 +123,7 @@ function create(chapters, rng, startIdx){
     if (G.menu) return menuPress();
     if (G.fade) return;
     if (G.mode === 'title'){
-      if (G.titleSel === 1 && G.canWatch){        // 「眺める」：最後の章の街を、見ているだけ
+      if (G.titleSel === 1){                       // 「エンディングロール」：いつでも、最後の章のエンディングを流す
         G.idx = chapters.length - 1; G.ch = chapters[G.idx];
         G.flags = {}; G.note = null; G.hud = null; G.auto = null; G.credits = null; G.outro = null;
         return hook('startWatch');
@@ -162,7 +161,7 @@ function create(chapters, rng, startIdx){
       }
       return;
     }
-    if (G.mode === 'title'){ if (G.canWatch && (d === 'up' || d === 'down')) G.titleSel ^= 1; return; }
+    if (G.mode === 'title'){ if (d === 'up' || d === 'down') G.titleSel ^= 1; return; }
     if (G.fade) return;
     const t = G.talk;
     if (t){
