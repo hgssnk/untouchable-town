@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ディグ・シティ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+  :root{--body:#c9c6bd;--shade:#a8a59b;--bezel:#5b5f6a;--btn:#8c2f4b}
+  html,body{height:100%;margin:0}
+  body{display:flex;align-items:center;justify-content:center;background:#2a2c33;font-family:system-ui,sans-serif;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+  .gb{width:min(92vw,360px);box-sizing:border-box;padding:22px 22px 28px;background:var(--body);border-radius:14px 14px 56px 14px;box-shadow:inset -3px -3px 0 var(--shade),0 8px 30px rgba(0,0,0,.5)}
+  .bezel{background:var(--bezel);border-radius:10px 10px 30px 10px;padding:16px 22px 18px}
+  canvas{display:block;width:100%;aspect-ratio:160/144;image-rendering:pixelated;background:#9bbc0f}
+  .controls{display:flex;justify-content:space-between;align-items:center;margin-top:26px;padding:0 4px}
+  .dpad{display:grid;grid-template-columns:repeat(3,38px);grid-template-rows:repeat(3,38px)}
+  .dpad button{border:0;background:#2b2d33;color:rgba(255,255,255,.25);font:14px system-ui;padding:0;cursor:pointer}
+  .dpad button:active{filter:brightness(1.4)}
+  .dpad .u{grid-area:1/2;border-radius:6px 6px 0 0}
+  .dpad .l{grid-area:2/1;border-radius:6px 0 0 6px}
+  .dpad .r{grid-area:2/3;border-radius:0 6px 6px 0}
+  .dpad .d{grid-area:3/2;border-radius:0 0 6px 6px}
+  .dpad i{grid-area:2/2;background:#2b2d33}
+  .pad{display:flex;gap:18px;transform:rotate(-20deg)}
+  .pad button{width:52px;height:52px;border-radius:50%;border:0;background:var(--btn);color:rgba(0,0,0,.35);font:700 14px system-ui;box-shadow:inset -2px -3px 0 rgba(0,0,0,.25);cursor:pointer}
+  .pad button:active{transform:translateY(1px);filter:brightness(.9)}
+  .pad button:nth-child(1){margin-top:22px}
+  .start{display:block;margin:20px auto 0;transform:rotate(-20deg);border:0;border-radius:10px;background:#7b7d85;color:rgba(0,0,0,.45);font:700 9px system-ui;letter-spacing:.1em;padding:5px 14px;cursor:pointer;box-shadow:inset -1px -2px 0 rgba(0,0,0,.25)}
+  .start:active{filter:brightness(.9)}
+  #outro{position:fixed;inset:0;width:100%;height:100%;display:none;pointer-events:none;z-index:10}
+</style>
+</head>
+<body>
+<canvas id="outro"></canvas>
+<div class="gb">
+  <div class="bezel"><canvas id="cv" width="160" height="144" aria-label="ゲーム画面"></canvas></div>
+  <div class="controls">
+    <div class="dpad">
+      <button class="u" data-dir="up" aria-label="上">▲</button>
+      <button class="l" data-dir="left" aria-label="左">◀</button>
+      <i></i>
+      <button class="r" data-dir="right" aria-label="右">▶</button>
+      <button class="d" data-dir="down" aria-label="下">▼</button>
+    </div>
+    <div class="pad">
+      <button id="bB" aria-label="B">B</button>
+      <button id="bA" aria-label="A">A</button>
+    </div>
+  </div>
+  <button class="start" id="bS" aria-label="START">START</button>
+</div>
+<script src="./model/walk.js"></script>
+<script src="./model/dig.js"></script>
+<script src="./model/wipe.js"></script>
+<script src="./model/maps.js"></script>
+<script src="./model/repair.js"></script>
+<script src="./model/arm.js"></script>
+<script src="./model/chop.js"></script>
+<script src="./model/band.js"></script>
+<script src="./model/ch1.js"></script>
+<script src="./model/ch2.js"></script>
+<script src="./model/ch3.js"></script>
+<script src="./model/ch4.js"></script>
+<script src="./model/ch5.js"></script>
+<script src="./model/ch6.js"></script>
+<script src="./model/ch7.js"></script>
+<script src="./model/game.js"></script>
+<script src="./layers/city.js"></script>
+<script src="./layers/objects.js"></script>
+<script src="./layers/walk.js"></script>
+<script src="./layers/dig.js"></script>
+<script src="./layers/wipe.js"></script>
+<script src="./layers/repair.js"></script>
+<script src="./layers/arm.js"></script>
+<script src="./layers/chop.js"></script>
+<script src="./layers/band.js"></script>
+<script src="./layers/cover.js"></script>
+<script src="./layers/textbox.js"></script>
+<script src="./sfx.js"></script>
+<script src="./party.js"></script>
+<script src="./outro.js"></script>
+<script src="./view.js"></script>
+<script src="./controller.js"></script>
+<script src="./index.js"></script>
+</body>
+</html>
