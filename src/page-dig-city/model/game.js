@@ -84,13 +84,15 @@ function create(chapters, rng, startIdx){
   G.start = function(){ G.flags = {}; G.note = null; G.hud = null; G.auto = null; G.credits = null; G.outro = null; hook('start'); };
 
   // ---- STARTボタン：ヒント／章えらび（クリアしていなくても、どの章からでも始められる） ----
-  const TOP = ['ヒント', '章えらび', 'ホームへ'];
+  const TOP = ['ヒント', '章えらび'];
   G.toggleMenu = function(){
     if (G.menu){ G.menu = null; return; }
     if (G.fade) return;
     G.menu = G.mode === 'title' ? { page: 'chapters', sel: G.idx } : { page: 'top', sel: 0 };
   };
-  G.menuItems = () => G.menu.page === 'top' ? TOP : chapters.map(c => c.title);
+  // 章えらびの先頭に「ホーム画面へ」（タイトルでは、すでにホームなので出さない）
+  const homeRow = () => G.mode !== 'title' ? 1 : 0;
+  G.menuItems = () => G.menu.page === 'top' ? TOP : (homeRow() ? ['ホーム画面へ'] : []).concat(chapters.map(c => c.title));
 
   // 同じ場面で押すたびに、ヒントが具体的になる（章が返す配列の、上から順）
   const hintCount = {};
@@ -104,7 +106,7 @@ function create(chapters, rng, startIdx){
     G.say(levels[Math.min(n, levels.length - 1)]);
   }
   function jump(){
-    G.idx = G.menu.sel; G.ch = chapters[G.idx];
+    G.idx = G.menu.sel - homeRow(); G.ch = chapters[G.idx];
     G.menu = null; G.talk = null; G.fade = null; G.note = null; G.hud = null; G.auto = null; G.credits = null; G.outro = null;
     G.cue('stopAll');
     for (const k in hintCount) delete hintCount[k];
@@ -112,10 +114,9 @@ function create(chapters, rng, startIdx){
   }
   function menuPress(){
     const m = G.menu;
-    if (m.page === 'chapters') return jump();
+    if (m.page === 'chapters') return homeRow() && m.sel === 0 ? G.toHome() : jump();
     if (m.sel === 0){ G.menu = null; hint(); }
-    else if (m.sel === 1) G.menu = { page: 'chapters', sel: G.idx };
-    else G.toHome();
+    else G.menu = { page: 'chapters', sel: G.idx + homeRow() };
   }
 
   // 章の「おわり」のあと：次の章へ。最後の章ならタイトルへ
