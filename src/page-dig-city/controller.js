@@ -17,9 +17,9 @@ window.createInput = function(cv, game){
     const d = KEYDIR[e.key];
     if (d){ e.preventDefault(); pressDir(d); return; }
     if (e.repeat) return;
-    if (e.key === 'Tab'){ e.preventDefault(); game.toggleMenu(); return; }
+    if (e.key === 'Tab'){ e.preventDefault(); if (game.outro) game.toHome(); else game.toggleMenu(); return; }   // 最後の演出中は、ゲームボーイが隠れているので、Tabで直接ホームへ
     if (isA(e.key)){ e.preventDefault(); pressA(); }
-    else if (['x','X','Escape'].includes(e.key)) game.back();
+    else if (['x','X','Escape'].includes(e.key)){ if (game.outro) game.toHome(); else game.back(); }
   });
 
   const A = document.getElementById('bA');

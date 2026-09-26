@@ -5,7 +5,7 @@ window.createOutro = function(overlay, gameCanvas){
   const LINK2 = 'https://www.youtube.com/watch?v=qVR9KsYH4Sc&list=PLBxu7MPeD3Myd22X64j_J9EbgY9hkLDWn&index=12';   // 「It's Your World」のあと、タップするとこのページへ移る
   const cover = new Image(); cover.src = './assets/jdilla.jpg';                                          // 最後の1枚
   const party = window.createParty(g);
-  let tapped = false, tapAt = 0, current = null;                                                                  // タップされたか／いまのゲーム
+  let tapped = false, waiting = false, sawHidden = false, tapAt = 0, current = null;   // waiting：1つ目のページを開いて、戻ってくるのを待っている                                                                  // タップされたか／いまのゲーム
   const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
   const lerp = (a, b, t) => a + (b - a) * t;
 
@@ -138,7 +138,7 @@ window.createOutro = function(overlay, gameCanvas){
 
   function draw(game){
     const o = game.outro;
-    if (!o){ overlay.style.display = 'none'; overlay.style.pointerEvents = 'none'; tapped = false; o_cued.clear(); return; }
+    if (!o){ overlay.style.display = 'none'; overlay.style.pointerEvents = 'none'; tapped = false; waiting = false; sawHidden = false; o_cued.clear(); return; }
     current = game;
     overlay.style.display = 'block';
     overlay.style.opacity = Math.min(1, o.t / 40);
@@ -184,7 +184,7 @@ window.createOutro = function(overlay, gameCanvas){
         }
         g.globalAlpha = 1;
       }
-      if (t >= T_TAP){ overlay.style.pointerEvents = 'auto'; overlay.style.cursor = 'pointer'; if (!tapped) clickHint(t, 226); }   // 最後の絵は、クリックできる
+      if (t >= T_TAP){ overlay.style.pointerEvents = 'auto'; overlay.style.cursor = 'pointer'; if (!tapped && !waiting) clickHint(t, 226); }   // 最後の絵は、クリックできる
     }
     if (tapped){                                                        // タップのあと：ブロックパーティー
       const tt = t - tapAt, p = ease(tt / 90);
@@ -236,13 +236,24 @@ window.createOutro = function(overlay, gameCanvas){
   }
 
   const o_cued = new Set();
-  // 最後の絵をタップすると、別タブで開く。最初のタップから、街のにぎやかな音が、ずっと流れる。
-  // 「It's Your World」が出たあとにタップすると、このページから2つ目のページへ移る
+  // 最後の絵をクリックすると、1つ目のページが別タブで開く。ブロックパーティーは、このタブに戻ってきたときに始まる
+  // （別タブが開かなかった／背景で開いた場合のために、1.5秒たっても離れなければ、そのまま始める）。
+  // 「It's Your World」が出たあとにクリックすると、このページから2つ目のページへ移る
+  function begin(){
+    if (!waiting || tapped || !current) return;
+    waiting = false; tapped = true; tapAt = current.outro.t; current.cue('townLoop');
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (!waiting) return;
+    if (document.hidden) sawHidden = true;
+    else if (sawHidden) begin();                                      // 戻ってきた
+  });
   overlay.addEventListener('click', () => {
-    if (!tapped){
+    if (!tapped && !waiting){
+      waiting = true; sawHidden = false;
       window.open(LINK, '_blank');
-      if (current){ tapped = true; tapAt = current.outro.t; current.cue('townLoop'); }
-    } else if (current && current.outro.t - tapAt >= TITLE_AT + 80){
+      setTimeout(() => { if (waiting && !sawHidden && !document.hidden) begin(); }, 1500);
+    } else if (tapped && current && current.outro.t - tapAt >= TITLE_AT + 80){
       window.location.href = LINK2;
     }
   });

@@ -74,12 +74,17 @@ function create(chapters, rng, startIdx){
   G.addObject = o => G.walker.addObject(o);
   G.removeObject = id => G.walker.removeObject(id);
   G.toTitle = function(){ G.idx = first; G.ch = chapters[first]; G.mode = 'title'; G.titleSel = 0; G.auto = null; G.credits = null; G.outro = null; G.cue('stopAll'); };
+  // ホーム（タイトル）へ：どこからでも、進行を捨てて戻る
+  G.toHome = function(){
+    G.menu = null; G.talk = null; G.fade = null; G.note = null; G.hud = null; G.flags = {};
+    G.toTitle();
+  };
   G.finish = function(){ G.mode = 'end'; G.cue('stopAll'); };
 
   G.start = function(){ G.flags = {}; G.note = null; G.hud = null; G.auto = null; G.credits = null; G.outro = null; hook('start'); };
 
   // ---- STARTボタン：ヒント／章えらび（クリアしていなくても、どの章からでも始められる） ----
-  const TOP = ['ヒント', '章えらび'];
+  const TOP = ['ヒント', '章えらび', 'ホームへ'];
   G.toggleMenu = function(){
     if (G.menu){ G.menu = null; return; }
     if (G.fade) return;
@@ -109,7 +114,8 @@ function create(chapters, rng, startIdx){
     const m = G.menu;
     if (m.page === 'chapters') return jump();
     if (m.sel === 0){ G.menu = null; hint(); }
-    else G.menu = { page: 'chapters', sel: G.idx };
+    else if (m.sel === 1) G.menu = { page: 'chapters', sel: G.idx };
+    else G.toHome();
   }
 
   // 章の「おわり」のあと：次の章へ。最後の章ならタイトルへ
